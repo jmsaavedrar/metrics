@@ -1,6 +1,7 @@
 import argparse
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
 def get_ranking(catalog, queries):
     #normalize to unit
@@ -35,13 +36,21 @@ if __name__ == '__main__' :
     # parser.add_argument("-relevants", type = str, help = "<str> relevants", required = True)    
     #
     # args = parser.parse_args()
-    catalog_file = '/home/vision/smb-datasets/VETE/recall_precision/pepeganga_catalog_data.npy'
-    queries_file = '/home/vision/smb-datasets/VETE/recall_precision/Pepeganga/query_embeddings.npy'
-    relevants_file = '/home/vision/smb-datasets/VETE/recall_precision/pepeganga_relevants.npy'
+    #VETE_dir = '/home/vision/smb-datasets/VETE'
+    VETE_dir = '/mnt/hd-data/Datasets/VETE/'
     
-    catalog_file_v = '/home/vision/smb-datasets/VETE/recall_precision/pepeganga_vete_catalog_data.npy'
-    queries_file_v = '/home/vision/smb-datasets/VETE/recall_precision/PepegangaCLIPBASE/query_embeddings.npy'
-    
+#     catalog_file = os.path.join(VETE_dir, 'recall_precision/Pepeganga/pepeganga_catalog_data.npy')
+#     queries_file = os.path.join(VETE_dir, 'recall_precision/Pepeganga/query_embeddings.npy')
+#     relevants_file = os.path.join(VETE_dir, 'recall_precision/pepeganga_relevants.npy')
+#     
+#     catalog_file_v = os.path.join(VETE_dir, 'recall_precision/PepegangaCLIPBASE/pepeganga_vete_catalog_data.npy')
+#     queries_file_v = os.path.join(VETE_dir, 'recall_precision/PepegangaCLIPBASE/query_embeddings.npy')
+    catalog_file = os.path.join(VETE_dir, 'recall_precision/Homy/homy_catalog_data.npy')
+    queries_file = os.path.join(VETE_dir, 'recall_precision/Homy/query_embeddings.npy')
+    relevants_file = os.path.join(VETE_dir, 'recall_precision/homy_relevants.npy')
+     
+    catalog_file_v = os.path.join(VETE_dir, 'recall_precision/HomyCLIPBASE/homy_vete_catalog_data.npy')
+    queries_file_v = os.path.join(VETE_dir, 'recall_precision/HomyCLIPBASE/query_embeddings.npy')
     
     catalog = np.load(catalog_file)    
     queries = np.load(queries_file)
@@ -57,7 +66,7 @@ if __name__ == '__main__' :
     #compute distances
     ranking = get_ranking(catalog, queries)
     ranking_v = get_ranking(catalog_v, queries_v)
-    
+    legend = ['Baseline', 'VETE']
     p_11 = compute_p11(ranking, relevants)
     p_11_v = compute_p11(ranking_v, relevants)
     #print(p_11)
@@ -65,6 +74,11 @@ if __name__ == '__main__' :
     plt.plot(r11, p_11,'r-')
     plt.plot(r11, p_11_v, 'b-')
     plt.yticks(ticks=np.arange(0,11,1)/10)
+    plt.ylabel('precision')
+    plt.xlabel('recall')
+    plt.grid(True, axis = 'y')    
+    plt.grid(True, axis = 'x')
+    plt.legend(legend)
     plt.show()
     
 
